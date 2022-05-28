@@ -6,7 +6,7 @@ const routerProducts = require("./routers/products");
 app.use(express.json());
 //app.use(cors());
 
-app.use("/", routerProducts);
+app.use("/products", routerProducts);
 
 app.listen(PORT, () => {
   console.log("Listening", PORT);
