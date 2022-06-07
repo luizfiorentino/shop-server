@@ -3,6 +3,15 @@ const ShopCart = require("../models").shopCart;
 
 const router = new Router();
 
+router.get("/", async (req, res, next) => {
+  try {
+    const allCarts = await ShopCart.findAll();
+    return res.status(200).send({ message: "ok", allCarts });
+  } catch (e) {
+    console.log(e.message);
+  }
+});
+
 router.post("/", async (req, res, next) => {
   try {
     const { productId, productName, price, userEmail } = req.body;

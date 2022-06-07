@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/products", routerProducts);
-app.use("/shopCart", routerShopCart);
+app.use("/shopCarts", routerShopCart);
 
 app.listen(PORT, () => {
   console.log("Listening", PORT);
