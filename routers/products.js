@@ -5,6 +5,7 @@
 const { Router } = require("express");
 const Product = require("../models").product;
 const Category = require("../models").category;
+const Review = require("../models").review;
 
 const router = new Router();
 
@@ -39,6 +40,68 @@ router.get("/:id", async (req, res, next) => {
   } catch (e) {
     next(e);
     console.log(e);
+  }
+});
+
+// GET all reviews
+router.get("/reviews/all", async (req, res, next) => {
+  try {
+    const allReviews = await Review.findAll();
+    res.status(200).send({ message: "ok", allReviews });
+  } catch (e) {
+    console.log(e.message);
+    next(e);
+  }
+});
+
+// GET all reviews for a product
+router.get("/reviews/:prodId", async (req, res, next) => {
+  try {
+    const prodId = parseInt(req.params.prodId);
+    const thisProduct = await Product.findByPk(parseInt(prodId));
+    if (!thisProduct) {
+      res.status(404).send("Product not found");
+    } else {
+      const reviews = await Review.findAll({
+        where: { productId: prodId },
+      });
+      //  where: { userId: req.user.id },
+      res.status(200).send(reviews);
+    }
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+});
+
+// router.get("/reviews/:id", async (req, res, next) => {
+//   try {
+//     const reviewId = parseInt(req.params.id);
+//     const thisReview = await Review.findByPk(reviewId);
+//     if (!thisReview) {
+//       res.status(404).send("This id does not match any of the products'");
+//     } else {
+//       res.send(thisReview);
+//     }
+//   } catch (e) {
+//     next(e);
+//     console.log(e);
+//   }
+// });
+
+// POST a new review
+router.post("/reviews/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { userReview } = req.body;
+    const newReview = await Review.create({
+      userReview,
+      productId: id,
+    });
+    res.send({ message: "review sent", newReview });
+  } catch (e) {
+    console.log(e.message);
+    next(e);
   }
 });
 

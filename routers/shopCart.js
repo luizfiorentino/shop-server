@@ -10,6 +10,7 @@ router.get("/", async (req, res, next) => {
     return res.status(200).send({ message: "ok", allCarts });
   } catch (e) {
     console.log(e.message);
+    next(e);
   }
 });
 
